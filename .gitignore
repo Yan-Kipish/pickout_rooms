@@ -131,3 +131,7 @@ dmypy.json
 # Editor's & IDE's metadata
 .vscode/
 .idea/
+
+# SQLite files
+*.db
+*.sqlite3
