@@ -7,8 +7,7 @@ from contextlib import contextmanager
 import models
 import schemas
 
-engine = create_engine(os.environ.get('USERS_DB_URI'))
-# engine = create_engine('sqlite:///users.db')
+engine = create_engine(os.environ.get('USERS_DB_URI') or 'sqlite:///users.db')
 
 Session = sessionmaker(bind=engine)
 
@@ -24,8 +23,11 @@ def session_scope():
     finally:
         session.close()
 
+def get_single_instance(session, model, **kwargs):
+    return session.query(model).filter_by(**kwargs).first()
+
 def get_or_create(session, model, **kwargs):
-    instance = session.query(model).filter_by(**kwargs).first()
+    instance = get_single_instance(session, model, **kwargs)
 
     if not instance:
         instance = model(**kwargs)
@@ -33,7 +35,13 @@ def get_or_create(session, model, **kwargs):
 
     return instance
 
+def refresh_new_instance(session, instance):
+    with session_scope() as session:
+        session.refresh(instance)
+    return instance
+
 def add_user(user_in: schemas.UserSocket):
+    new_user = None
     with session_scope() as session:
         input_user = get_or_create(
             session, 
@@ -46,8 +54,18 @@ def add_user(user_in: schemas.UserSocket):
             **user_in.messenger.dict()
         )
         input_chat_token = user_in.chat_token
-        session.add(models.UserSocket(
+
+        new_user = models.UserSocket(
             user=input_user,
             messenger=messenger,
             chat_token=input_chat_token
-        ))
+        )
+        session.add(new_user)
+    
+    return refresh_new_instance(new_user)
+
+def get_user_by_nickname(nickname: str):
+    user = None
+    with session_scope() as session:
+        user = get_single_instance(session, models.User, nickname=nickname)
+    return dict(user)
