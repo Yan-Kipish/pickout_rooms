@@ -40,32 +40,37 @@ def refresh_new_instance(session, instance):
         session.refresh(instance)
     return instance
 
-def add_user(user_in: schemas.UserSocket):
+def add_user(user_in: schemas.Account):
     new_user = None
     with session_scope() as session:
         input_user = get_or_create(
             session, 
-            models.User, 
+            models.Users, 
             **user_in.user.dict()
         )
         messenger = get_or_create(
             session, 
-            models.Messenger,
+            models.Messengers,
             **user_in.messenger.dict()
         )
         input_chat_token = user_in.chat_token
 
-        new_user = models.UserSocket(
+        new_user = models.Accounts(
             user=input_user,
             messenger=messenger,
-            chat_token=input_chat_token
+            chatToken=input_chat_token
         )
         session.add(new_user)
     
     return refresh_new_instance(new_user)
 
+def update_user(user_in: schemas.Account):
+    # TODO: реализовать логику обновления юзеров по разным параметрам
+    with session_scope() as session:
+        pass
+
 def get_user_by_nickname(nickname: str):
     user = None
     with session_scope() as session:
-        user = get_single_instance(session, models.User, nickname=nickname)
+        user = get_single_instance(session, models.Users, nickname=nickname)
     return dict(user)

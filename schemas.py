@@ -10,7 +10,13 @@ class Messenger(BaseModel):
     messenger_name: constr(max_length=32)
 
 
-class UserSocket(BaseModel):
+class Account(BaseModel):
     user: User
     messenger: Messenger
     chat_token: str
+
+class AccountInDB(Account):
+    accountId: int
+
+    class Config:
+        orm_mode = True
