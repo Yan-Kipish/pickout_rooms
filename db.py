@@ -74,3 +74,6 @@ def get_user_by_nickname(nickname: str):
     with session_scope() as session:
         user = get_single_instance(session, models.Users, nickname=nickname)
     return dict(user)
+
+def get_user_accounts(nickname: str):
+    return get_user_by_nickname(nickname)['accounts']

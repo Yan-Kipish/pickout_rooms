@@ -13,3 +13,7 @@ def register_user(request: schemas.Account):
 def update_user(request: schemas.Account):
     updated_user = db.update_user(request)
     return schemas.AccountInDB.from_orm(updated_user)
+
+@base_router.get('/get_user_accounts/{nickname}')
+def get_user_accounts(nickname: str):
+    return db.get_user_accounts(nickname)
