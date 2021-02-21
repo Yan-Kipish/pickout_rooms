@@ -77,3 +77,6 @@ def get_user_by_nickname(nickname: str):
 
 def get_user_accounts(nickname: str):
     return get_user_by_nickname(nickname)['accounts']
+
+def add_user_account(account: schemas.Account):
+    return add_user(account)
