@@ -20,3 +20,9 @@ class AccountInDB(Account):
 
     class Config:
         orm_mode = True
+
+class Room(BaseModel):
+    roomName: str
+    # creator: User
+    class Config:
+        orm_mode = True

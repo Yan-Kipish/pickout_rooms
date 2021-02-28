@@ -35,7 +35,7 @@ def get_or_create(session, model, **kwargs):
 
     return instance
 
-def refresh_new_instance(session, instance):
+def refresh_new_instance(instance):
     with session_scope() as session:
         session.refresh(instance)
     return instance
@@ -80,3 +80,10 @@ def get_user_accounts(nickname: str):
 
 def add_user_account(account: schemas.Account):
     return add_user(account)
+
+def add_room(name: str):
+    room = None
+    with session_scope() as session:
+        room = get_or_create(session, models.Rooms, roomName=name)
+    return refresh_new_instance(room)
+

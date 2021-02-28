@@ -13,6 +13,13 @@ def register_user(request: schemas.Account):
 def get_user_accounts(nickname: str):
     return db.get_user_accounts(nickname)
 
+@base_router.post('/add_user_account')
 def add_user_account(request: schemas.Account):
     updated_user = db.add_user_account(request)
     return schemas.AccountInDB.from_orm(updated_user)
+
+@base_router.post('add_room')
+def add_room(roomname: str):
+    new_room = db.add_room(roomname)
+    return schemas.Room.from_orm(new_room)
+    
