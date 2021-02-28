@@ -87,3 +87,11 @@ def add_room(name: str):
         room = get_or_create(session, models.Rooms, roomName=name)
     return refresh_new_instance(room)
 
+def delete_room(name: str):
+    try:
+        with session_scope() as session:
+            room = get_single_instance(session, models.Rooms, roomName=name)
+            session.delete(room)
+        return {"success": "room removed successful"}
+    except Exception as e:
+        return {"error" : str(e)}

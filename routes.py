@@ -18,8 +18,11 @@ def add_user_account(request: schemas.Account):
     updated_user = db.add_user_account(request)
     return schemas.AccountInDB.from_orm(updated_user)
 
-@base_router.post('add_room')
+@base_router.post('/add_room')
 def add_room(roomname: str):
     new_room = db.add_room(roomname)
     return schemas.Room.from_orm(new_room)
-    
+
+@base_router.delete('/delete_room')
+def delete_room(roomname: str):
+    return db.delete_room(roomname)
