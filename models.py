@@ -59,10 +59,10 @@ class RoomsUsers(Base):
     roleId = Column(Integer(), ForeignKey('roles.roleId'))
     markerId = Column(Integer(), ForeignKey('markers.markerId'))
 
-    users = relationship("Users")
-    rooms = relationship("Rooms")
-    roles = relationship("Roles")
-    markers = relationship("Markers")
+    user = relationship("Users")
+    room = relationship("Rooms")
+    role = relationship("Roles")
+    marker = relationship("Markers")
 
 class Roles(Base):
     __tablename__ = 'roles'

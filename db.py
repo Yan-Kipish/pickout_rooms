@@ -95,3 +95,15 @@ def delete_room(name: str):
         return {"success": "room removed successful"}
     except Exception as e:
         return {"error" : str(e)}
+
+
+def add_user_to_room(nickname, roomname):
+    try:
+        with session_scope() as session:
+            user = get_single_instance(session, models.Users, nickname=nickname)
+            room = get_single_instance(session, models.Rooms, roomName=roomname)
+            new_roommate = models.RoomsUsers(user=user, room=room)
+            session.add(new_roommate)
+        return {"success": f"user {nickname} added to room \"{roomname}\""}
+    except Exception as e:
+        return {"error" : str(e)}

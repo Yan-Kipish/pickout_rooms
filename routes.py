@@ -26,3 +26,7 @@ def add_room(roomname: str):
 @base_router.delete('/delete_room')
 def delete_room(roomname: str):
     return db.delete_room(roomname)
+
+@base_router.post('/add_user_to_room')
+def add_user_to_room(username: str, roomname: str):
+    return db.add_user_to_room(username, roomname)
