@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 import schemas
 import db
+import message_pool
 
 base_router = APIRouter()
 
@@ -30,3 +31,15 @@ def delete_room(roomname: str):
 @base_router.post('/add_user_to_room')
 def add_user_to_room(username: str, roomname: str):
     return db.add_user_to_room(username, roomname)
+
+@base_router.post('/push_message_to_pool')
+def push_message_to_pool(message):
+    return {"saved_message_id": message_pool.push_message_to_pool(message)}
+
+@base_router.get('/read_messages_from_pool')
+def read_messages_from_pool(room_id, owner_id=None):
+    return message_pool.read_messages_from_pool(room_id, owner_id)
+
+@base_router.delete('/delete_message_from_pool')
+def delete_message_from_pool(message_id=None):
+    return {"messages deleted": message_pool.delete_message_from_pool(message_id)}
